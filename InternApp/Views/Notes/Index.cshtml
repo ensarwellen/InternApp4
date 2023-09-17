@@ -1,0 +1,162 @@
+﻿@model Notes
+@if (TempData["result"] != null)
+{
+    @TempData["result"];
+}
+@section Scripts{
+    <script type="text/javascript">
+
+        function btnDelete(sil) {
+
+
+            var id = $(sil).attr("data-id");
+            var deletenote = $("Id").val();
+            $.ajax({
+                type: "POST",
+                url: "/Notes/RemoveNote",
+                data: { id: id },
+                success: function (data) {
+                    
+                    alert("Not Silindi");
+                    //göster
+                    
+                    loadNotes();
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function loadNotes() {
+            $.ajax({
+                type: "GET",
+                url: "/Notes/ListNotes",
+                success: function (data) {
+                   
+                    $("#SavedNotes").html("");
+                    $.each(data, function (index, item) {
+
+                        let isSelected = item.isSelected ? "checked" : ""; // Checkbox'ı işaretli mi kontrolü
+
+                        let comment = `<div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="card-text">${item.note}</p>
+                    </div>
+                    <div class="col-3 text-right">
+                    <input type="checkbox" class="form-check-input" data-id="${item.id}" ${isSelected} />
+                    </div>
+                            <div class="col-3 text-right" style="text-align:right;">
+                        
+                        <button id="btnDelete" onclick="btnDelete(this);" type="button" class="btn btn-danger" data-id="${item.id}">Not Sil</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+
+                        $("#SavedNotes").append(comment);
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+        }
+        function updateCheckbox(id, isSelected) {
+            $.ajax({
+                type: "POST",
+                url: "/Notes/UpdateCheckbox",
+                data: { id: id, isSelected: isSelected },
+                success: function (data) {
+                    console.log("Checkbox güncellendi");
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+        $(document).on("change", ":checkbox", function () {
+            var id = $(this).data("id");
+            var isSelected = $(this).prop("checked");
+            updateCheckbox(id, isSelected);
+        });
+    $(document).ready(function(){
+
+        
+        loadNotes();
+         
+        
+
+        $("#btnSave").click(function(){
+            var note = $("#Note").val();
+            var jsonData = {"Note":note};
+
+            $.ajax({
+                type:"POST",
+                url:"/Notes/SaveNote",
+                data: jsonData,
+                success:function(data){
+                alert("Not Kaydedildi");
+                loadNotes();
+                },
+                error:function(error){
+                console.log(error);
+                }
+            });
+        })
+    })    
+    
+    </script>
+}
+<div>
+    <div class="row" >
+        <div class="col-6">
+            <h6>Notlar</h6>
+        </div>
+        <div class="col-3 text-right">
+            <h6>İşlem</h6>
+        </div>
+        <div class="col-2 text-right" style="text-align:right;">
+            
+        </div>
+        <div class="col-1 text-right" style="text-align:center;">
+            <h6>Sil</h6>
+        </div>
+    </div>
+    
+</div>
+<div id="SavedNotes">
+    
+</div>
+
+@*@foreach (var item in ViewBag.Notes as List<Notes>)
+{
+    <div class="card mb-3">       
+        <div class="card-body">            
+            <p class="card-text">@item.Note</p>
+            
+            <a asp-controller="Notes" asp-action="RemoveNote" asp-route-id="@item.Id">Sil</a>
+        </div>
+    </div>
+}*@
+
+@*<form asp-controller="Notes" asp-action="SaveNote" method="post">
+    <div class="mb-3">
+        <label asp-for="Note" class="form-label">Not</label>
+        <input class="form-control" asp-for="Note" />
+    </div>
+    <button type="submit" class="btn btn-primary">Not Ekle</button>
+</form>*@
+
+<form>
+    <div class="mb-3">
+        <label for="Note" class="form-label">Not</label>
+        <input class="form-control" id="Note" name="Note" placeholder="not ekle" />
+    </div>
+    <button id="btnSave" type="button" class="btn btn-primary">Not Ekle</button>
+</form>
+    

@@ -1,0 +1,127 @@
+﻿@{
+    ViewData["Title"] = "Random Quote";
+}
+
+<div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h1 class="card-title text-center mb-4">Rastgele Özlü Söz</h1>
+                        <div id="quoteContainer" class="container">
+                            <p class="mb-4" id="quoteDisplay"></p>
+                        </div>
+                        <div class="button-container">
+                            <button type="button" class="btn ice-button" id="getQuoteButton">Özlü Söz Getir</button>
+                            <button type="button" class="btn btn-link" id="shareOnTwitterButton"></button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Sayfa yüklendiğinde ve butona tıklandığında rastgele alıntıyı getir
+    window.addEventListener('load', function () {
+        getRandomQuote();
+    });
+    // Butona tıklandığında alıntıyı güncelle
+    document.getElementById("getQuoteButton").addEventListener("click", function () {
+        getRandomQuote();
+    });
+
+
+    function getRandomQuote() {
+        fetch("/Quote/GetRandomQuote")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("HTTP error! Status: " + response.status);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById("quoteDisplay").innerHTML = data;
+            })
+            .catch(error => {
+                console.error("Error fetching quote:", error);
+            });
+    }
+
+    
+
+    document.getElementById("shareOnTwitterButton").addEventListener("click", function () {
+        // Alıntı ve yazarı al
+        var quote = document.getElementById("quoteDisplay").innerText;
+
+        // Twitter paylaşım linkini oluştur
+        var twitterShareLink = "https://twitter.com/intent/tweet?hashtags=YazılımPark&text=" + encodeURIComponent(quote);
+
+        // Yeni pencerede Twitter paylaşım sayfasını aç
+        window.open(twitterShareLink, "_blank");
+    });
+</script>
+
+
+@*<script>
+    document.getElementById("shareOnTwitterButton").addEventListener("click", function () {
+        // Alıntıyı al
+        var quote = document.getElementById("quoteDisplay").innerText;
+
+        // Twitter paylaşım linkini oluştur
+        var twitterShareLink = "https://twitter.com/intent/tweet?hashtags=YazılımPark&text=" + encodeURIComponent(quote);
+
+        // Yeni pencerede Twitter paylaşım sayfasını aç
+        window.open(twitterShareLink, "_blank");
+    });
+
+    // Butona tıklandığında alıntıyı getir
+    document.getElementById("getQuoteButton").addEventListener("click", function () {
+        // AJAX isteği oluştur
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/Quote/GetRandomQuote", true);
+
+        // İstek tamamlandığında
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                // Başarılı bir şekilde alındığında alıntıyı güncelle
+                document.getElementById("quoteDisplay").innerHTML = xhr.responseText;
+            } else {
+                // Hata durumunda hata mesajını göster
+                console.error("Error fetching quote. Status code: " + xhr.status);
+            }
+        };
+
+        // İstek gönder
+        xhr.send();
+    });
+</script>*@
+
+
+@*<script>
+    document.getElementById("shareOnTwitterButton").addEventListener("click", function () {
+        // Alıntı ve yazarı al
+        var quote = document.getElementById("quoteDisplay").innerText;
+
+        // Twitter paylaşım linkini oluştur
+        var twitterShareLink = "https://twitter.com/intent/tweet?hashtags=YazılımPark&text=" + encodeURIComponent(quote);
+
+        // Yeni pencerede Twitter paylaşım sayfasını aç
+        window.open(twitterShareLink, "_blank");
+    });
+    // Butona tıklandığında API'den alıntıyı getir
+    document.getElementById("getQuoteButton").addEventListener("click", function () {
+        fetch("/Quote/GetRandomQuote")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("quoteDisplay").innerHTML = data;
+            })
+            .catch(error => {
+                console.error("Error fetching quote:", error);
+            });
+    });
+</script>*@

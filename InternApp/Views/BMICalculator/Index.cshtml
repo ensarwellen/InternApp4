@@ -1,0 +1,84 @@
+﻿@*@{
+    Layout = "_BmiLayout";
+}*@
+@model InternApp.Models.BMICalculator
+
+
+<form id="bmiForm">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title text-center mb-4">Vücut Kitle Endeksi Hesaplama</h1>
+                        <h4 class="mb-2">Kilo (Kg)</h4>
+                <input type="text" class="form-control" id="weight" name="Weight" placeholder="Kilo (kg)"><br />
+                        <h4 class="mb-2">Boy (m)</h4>
+                <input type="text" class="form-control" id="height" name="Height" placeholder="Boy (metre)"><br />
+                <input type="button" class="btn ice-button" id="calculateBtn" value="Hesapla">
+                <div id="result" class="mt-4"></div>
+            </div>
+            </div>
+            </div>
+                
+        </div>
+
+    </div>
+       
+</form>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#calculateBtn").click(function () {
+            var weight = $("#weight").val();
+            var height = $("#height").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/BMICalculator/Calculate",
+                data: { weight: weight, height: height },
+                success: function (cevap) {
+                    var bmi = cevap.bmi;
+                    $("#result").html("Vücut Kitle Endeksi: " + bmi);
+                    if (bmi < 18.5) {
+                        $("#result").append("<br>~~ İdeal kilonun altında :(");
+                    } else if (bmi >= 18.5 && bmi<24.9) {
+                        $("#result").append("<br>~~ İdeal kiloda ^^");
+                    } else if (bmi >= 24.9 && bmi < 29.9) {
+                        $("#result").append("<br>~~ İdeal kilonun üstünde :(");
+                    } else if (bmi >= 29.9 && bmi < 39.9) {
+                        $("#result").append("<br>~~ İdeal kilonun çok üstünde (Obez) XD");
+                    } else {
+                        $("#result").append("<br>~~ İdeal kilonun çok üstünde (Morbid Obez) HAHAHA");
+                    }
+                },
+                error: function () {
+                    $("#result").html("Hesaplama başarısız.");
+                }
+            });
+        });
+    });
+</script>
+
+
+@*<form asp-controller="BMICalculator" asp-action="Calculate" method="post">
+    <div class="mb-3">
+        <label asp-for="Weight" class="form-label">Kilo</label>
+        <input class="form-control" asp-for="Weight">
+        <span class="text-danger" asp-validation-for="Weight"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Height" class="form-label">Boy</label>
+        <input class="form-control" asp-for="Height">
+        <span class="text-danger" asp-validation-for="Height"></span>
+    </div>
+    <button class="btn btn-primary mt-2" id="btnSave" type="submit">Hesapla</button><br />
+    @if(ViewBag.BmiResult != null)
+    {
+        <text>Bmi Değeriniz: </text> @ViewBag.Bmi; <br />
+        <text>Bmi Değerine Göre Sonucunuz: </text> @ViewBag.BmiResult;
+    }
+</form>*@

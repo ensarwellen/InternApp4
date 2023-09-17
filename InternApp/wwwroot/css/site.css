@@ -1,0 +1,53 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-image: url('/css/lightblue.jpg');
+    background-size: cover; /* Resmi pencereye sýðdýr */
+    background-repeat: no-repeat; /* Tekrarlamayý engelle */
+}
+#quoteContainer {
+    margin-bottom: 20px; /* Özel özellikler burada tanýmlanabilir */
+}
+#shareOnTwitterButton {
+    width: 50px; /* Düðmenin geniþliði */
+    height: 50px; /* Düðmenin yüksekliði */
+    background-image: url('/css/X_logo.jpg'); /* Kullanmak istediðiniz PNG dosyasýnýn yolunu belirtin */
+    background-size: cover; /* Arka planý düðme boyutuna sýðdýrmak için */
+    background-repeat: no-repeat; /* Arka planýn tekrar etmemesini saðlamak için */
+    border: none; /* Kenarlýðý kaldýrýn (isteðe baðlý) */
+}
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ice-button {
+    background-color: #0099cc; /* Mavi bir arka plan rengi */
+    color: #ffffff; /* Beyaz metin rengi */
+    border: none; /* Kenarlýk yok */
+    padding: 10px 20px; /* Düðme içeriði etrafýndaki iç boþluk */
+    border-radius: 5px; /* Köþeleri yuvarlama */
+    text-align: center; /* Metni ortala */
+    text-decoration: none; /* Metin altýný çizme */
+    display: inline-block; /* Düðmeyi blok olarak görüntüleme */
+    font-size: 16px; /* Metin boyutu */
+    transition: background-color 0.3s ease; /* Arka plan rengi deðiþimini düzgünleþtirme */
+}
+
+.ice-button:hover {
+    background-color: #66ccff; /* Fare üzerine geldiðinde arka plan rengini deðiþtirin */
+}
